@@ -2,18 +2,15 @@
 
 using namespace std;
 
-ListArr ::ListArr()
-{
+ListArr ::ListArr(){
     
 }
 
-int ListArr::size()
-{
+int ListArr::size(){
     return num_elements;
 }
 
-int ListArr::delete_left()
-{
+int ListArr::delete_left(){
     if (head == nullptr)
     {
         // la lista está vacía
@@ -40,8 +37,7 @@ int ListArr::delete_left()
     return deleted_value;
 }
 
-int ListArr::delete_right()
-{
+int ListArr::delete_right(){
     if (head == nullptr)
     {
         // la lista está vacía
@@ -69,8 +65,7 @@ int ListArr::delete_right()
     return deleted_value;
 }
 
-void ListArr::insert_left(int v)
-{
+void ListArr::insert_left(int v){
     if (head == nullptr)
     {
         // la lista está vacía, se crea el primer nodo
@@ -102,33 +97,25 @@ void ListArr::insert_left(int v)
     }
 }
 
-void ListArr::insert_right(int v)
-{
-    if (head == nullptr)
-    {
+void ListArr::insert_right(int v){
+    if (head == nullptr){
         // la lista está vacía, se crea el primer nodo
         head = new Node(b);
         head->arr[0] = v;
         head->num_elements++;
         num_elements++;
-    }
-    else
-    {
+    }else{
         Node *current_node = head;
-        while (current_node->next != nullptr && current_node->num_elements == b)
-        {
+        while (current_node->next != nullptr && current_node->num_elements == b){
             // se busca el último nodo que no esté lleno
             current_node = current_node->next;
         }
-        if (current_node->num_elements < b)
-        {
+        if (current_node->num_elements < b){
             // se inserta en el último nodo no lleno
             current_node->arr[current_node->num_elements] = v;
             current_node->num_elements++;
             num_elements++;
-        }
-        else
-        {
+        }else{
             // todos los nodos están llenos, se crea uno nuevo y se inserta
             Node *new_node = new Node(b);
             new_node->arr[0] = v;
@@ -139,8 +126,7 @@ void ListArr::insert_right(int v)
     }
 }
 
-void ListArr::insert(int v, int i)
-{
+void ListArr::insert(int v, int i){
     if (i < 0 || i > num_elements) {
         // índice inválido, no se hace nada
         return;
@@ -177,8 +163,7 @@ void ListArr::insert(int v, int i)
     }
 }
 
-void ListArr::print()
-{
+void ListArr::print(){
     Node *current_node = head;
     while (current_node != nullptr) {
         for (int i = 0; i < current_node->num_elements; i++) {
@@ -189,8 +174,7 @@ void ListArr::print()
     std::cout << std::endl;
 }
 
-bool ListArr::find(int v)
-{
+bool ListArr::find(int v){
     Node *current_node = head;
     while (current_node != nullptr) {
         for (int i = 0; i < current_node->num_elements; i++) {

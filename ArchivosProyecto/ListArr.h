@@ -11,10 +11,10 @@ private:
         int num_elements;
         Node *next;
 
-        Node(int b, Node *next = nullptr)
+        Node(int b)
         {
             this->b = b;
-            this->next = nullptr;
+            next = nullptr;
             num_elements = 0;
             arr = new int[b];
         }
@@ -49,8 +49,6 @@ struct NodeSummary{
     virtual bool find(int v) = 0;
 
     NodeSummary createNodeSummary(Node* left, Node* right);
-
-    
 };
 
 #endif
