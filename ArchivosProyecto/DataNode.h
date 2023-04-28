@@ -11,12 +11,14 @@ private:
 	int countUsed;
 public:
 	DataNode(int);
+	bool findNumber(int);
 	void addLeft(int);
 	void add(int, int);
+	void printElements();
 	void setNext(DataNode*);
 	DataNode* getNext();
+	int* getArreglo();
 	int getCapacity();
 	int getcountUsed();
-	void printElements();
 };
 #endif
