@@ -2,43 +2,34 @@
 #define _LISTARR
 #include <iostream>
 
+using namespace std;
+
 class ListArr{
-    
-private:
-    struct Node{
+    private:
+    struct Node {
         int *arr;
-        int b;
+        int capacidad;
         int num_elements;
         Node *next;
-
-        Node(int b)
-        {
-            this->b = b;
-            next = nullptr;
+        
+        Node(int capacidad, Node* next=nullptr) {
+            this->capacidad = capacidad;
+            this->next = next;
             num_elements = 0;
-            arr = new int[b];
+            arr = new int[capacidad];
         }
-
-        ~Node()
-        {
+        
+        ~Node() {
             delete[] arr;
         }
     };
-
     
-
     int b;
     int num_elements;
     Node *head;
 
 public:
-struct NodeSummary{
-        int total_capacity;
-        int total_size;
-        NodeSummary *left_child;
-        NodeSummary *right_child;
-    };
-
+    ListArr(int);
     virtual int size() = 0;
     virtual int delete_left() = 0;
     virtual int delete_right() = 0;
@@ -48,7 +39,6 @@ struct NodeSummary{
     virtual void print() = 0;
     virtual bool find(int v) = 0;
 
-    NodeSummary createNodeSummary(Node* left, Node* right);
 };
 
 #endif
