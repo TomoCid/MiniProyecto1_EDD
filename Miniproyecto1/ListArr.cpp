@@ -1,5 +1,5 @@
 #include "ListArr.h"
-#include "NodeSummary.h"
+#include <vector>
 using namespace std;
 
 //Modificar para adaptarlo a la estructura de nodos
@@ -14,7 +14,9 @@ void ListArr::insert(int v, int i){
 
 //En proceso
 void ListArr::createSummaryNodes(NodeSummary *root){ //Funcion recurvisa 
-    
+    vector<NodeSummary *> SummaryAuxiliarList;
+
+
     if (root == nullptr)
     {
         return;
@@ -22,11 +24,54 @@ void ListArr::createSummaryNodes(NodeSummary *root){ //Funcion recurvisa
 
     NodeSummary *current = root;
     NodeSummary *prev = nullptr;
-    //------------------------//
+    
+    if (current->SummaryNext == nullptr)
+    {
+        NodeSummary *summary = new NodeSummary();
+        SummaryAuxiliarList.push_back(summary);
+        summary->total_capacity = current->total_capacity;
+        summary->total_size = current->total_size;
+        summary->Summaryleft_child = current;
+        summary->right_child = nullptr;
+        return;
+    }
+
+     while (current != nullptr)
+    {
+        if (current->SummaryNext == nullptr)
+        {
+            NodeSummary *summary = new NodeSummary();
+            SummaryAuxiliarList.push_back(summary);
+            summary->total_capacity = prev->total_capacity + current->total_capacity;
+            summary->total_size = prev->total_size + current->total_size;
+            summary->Summaryleft_child = prev;
+            summary->Summaryright_child = current;
+        }
+
+        prev = current;
+        current = current->SummaryNext;
+    }
+
+    if(SummaryAuxiliarList.size() == 1){ //Si el vector auxiliar solo contiene un nodo resumen es porque es la raiz del arbol
+        TreeRoot = SummaryAuxiliarList[0];
+        return;
+    }
+
+    NodeSummary *firstNode = SummaryAuxiliarList[0]; //Guardarlo para usarlo en la llamada recursiva
+    NodeSummary *SummaryCurrent = SummaryAuxiliarList[0]; //A cada nodo resumen le damos puntero al siguiente para poder armar el siguiente nivel
+    for (auto it = SummaryAuxiliarList.begin() + 1; it != SummaryAuxiliarList.end(); ++it) { //For de tipo "range-based for loop"
+        SummaryCurrent->SummaryNext = *it;
+        SummaryCurrent = *it;
+    }
+
+    SummaryAuxiliarList.clear();
+    createSummaryNodes(firstNode);
 }
 
 //En proceso
 void ListArr::createSummaryNodes(Node *root){
+    vector<NodeSummary *> NodeSummaryFirstLevel;
+
     if (root == nullptr)
     {
         return;
@@ -38,6 +83,7 @@ void ListArr::createSummaryNodes(Node *root){
     if (current->next == nullptr)
     {
         NodeSummary *summary = new NodeSummary();
+        NodeSummaryFirstLevel.push_back(summary);
         summary->total_capacity = current->capacity;
         summary->total_size = current->num_elements;
         summary->left_child = current;
@@ -50,6 +96,7 @@ void ListArr::createSummaryNodes(Node *root){
         if (current->next == nullptr)
         {
             NodeSummary *summary = new NodeSummary();
+            NodeSummaryFirstLevel.push_back(summary);
             summary->total_capacity = prev->capacity + current->capacity;
             summary->total_size = prev->num_elements + current->num_elements;
             summary->left_child = prev;
@@ -59,13 +106,25 @@ void ListArr::createSummaryNodes(Node *root){
         prev = current;
         current = current->next;
     }
+
+    //Se añaden todos los nodos resumen a un vector y se les asigna un puntero al nodo que sigue.
+    NodeSummary *firstNode = NodeSummaryFirstLevel[0];
+    NodeSummary *SummaryCurrent = NodeSummaryFirstLevel[0];
+    for (auto it = NodeSummaryFirstLevel.begin() + 1; it != NodeSummaryFirstLevel.end(); ++it) { //For de tipo "range-based for loop"
+        SummaryCurrent->SummaryNext = *it;
+        SummaryCurrent = *it;
+    }
+
+    //Aqui debe comenzar el llamado recursivo para crear nodos resumen de los nodos resumen
+    NodeSummaryFirstLevel.clear();
+    createSummaryNodes(firstNode);
 }
 
 //En proceso
 int ListArr::delete_left(){
     if(head == nullptr){
         throw "No hay elementos que eliminar";
-        return;
+        return 0;
     }else{
         Node *current = head;
         if(current->num_elements == 0){
@@ -154,7 +213,7 @@ void ListArr::insert_right(int v){
     }
 }
 
-//Listo
+//Listo (Me parece correcto c; )
 void ListArr::print(){
     Node *current = head;
     while (current->next != nullptr){
@@ -165,6 +224,7 @@ void ListArr::print(){
     }
 }
 
+//La implementacion que dejaste actualmente es en base a recorrer todos los nodos, no usa arbol
 //"Listo a medias" (En una de esas hay una forma más eficiente de implementarlo con NodeSummary, por lo que es una solucion temporal)
 //Falta comprobar si funciona o hay algun error.
 bool ListArr::find(int v){

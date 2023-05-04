@@ -32,9 +32,16 @@ public:
     struct NodeSummary{
         int total_capacity;
         int total_size;
+        //ESTOS SON LOS HIJOS DE TIPO NODO (LOS QUE CONTIENEN ARREGLOS)
         Node *left_child;
         Node *right_child;
+        //ESTOS SON LOS HIJOS DE TIPO NODESUMARY (EN OTRAS PALABRAS, HIJOS RESUMEN)
+        NodeSummary *Summaryleft_child;
+        NodeSummary *Summaryright_child;
+        NodeSummary *SummaryNext;
     };
+
+    NodeSummary *TreeRoot;
 
     //Constructor de ListArr
     ListArr(int capacity);
