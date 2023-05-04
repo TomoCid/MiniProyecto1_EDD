@@ -165,13 +165,26 @@ void ListArr::print(){
     }
 }
 
-//En proceso
+//"Listo a medias" (En una de esas hay una forma más eficiente de implementarlo con NodeSummary, por lo que es una solucion temporal)
+//Falta comprobar si funciona o hay algun error.
 bool ListArr::find(int v){
-    
+    Node* current = head; //Guardamos la ubicacion de head.
+    for(int i=0; i<num_elements; i++){
+        if(head->arr[i] == v){ //Si encuentra el dato en el arreglo retorna true.
+            head = current;
+            return true;
+        }
+    }
+    if(head->next != nullptr){ //Si no, revisa si hay más nodos, y en el caso de que si, lo recorre.
+        head->next;
+        find(v);
+    } else {  // Si no quedan nodos, retorna false.
+        return false;
+    }
 }
 
 //Listo (*IDEA*: Se puede mejorar agregando un contador de nodos dentro de la estructura)
-int ListArr::countNodes(){
+int ListArr::countNodes(){ //Recorre los nodos, y cuenta hasta llegar a nulo.
     Node* current = head;
     int count = 0;
     for(count = 0; current->next != nullptr; count++){
