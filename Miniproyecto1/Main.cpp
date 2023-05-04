@@ -3,10 +3,18 @@
 using namespace std;
 
 int main(){
-    ListArr listArr(10); // Se crea una instancia de clase ListArr
-    ListArr::Node *root = new ListArr::Node(10); //Se crea un nodo de tamaño 10
+    ListArr listArr(5); // Se crea una instancia de clase ListArr
+    ListArr::Node *root = new ListArr::Node(5); //Se crea un nodo de tamaño 10
 
     //Aqui debemos llamar la funcion para insertar elementos al nodo y si estos se pasan del tama;o la misma funcion debe crear nodos nuevos
+    for(int i=0;i<20;i++){
+        listArr.insert_left(4);
+        
+    }
+    listArr.print();
+
+    listArr.createSummaryNodes(root);
+    cout<<"Nodo raiz:"+ listArr.TreeRoot->total_capacity;
     
-    listArr.createSummaryNodes(root); //Se llama a la funcion para crear los nodos resumen en base a la cantida de nodos
+    
 }
