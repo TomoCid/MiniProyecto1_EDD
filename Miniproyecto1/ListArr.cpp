@@ -1,14 +1,18 @@
 #include "ListArr.h"
+#include "NodeSummary.h"
 using namespace std;
 
+//Modificar para adaptarlo a la estructura de nodos
 ListArr::ListArr(int capacity){
     this->capacity = capacity;
 }
 
+//En proceso
 void ListArr::insert(int v, int i){
         
 }
 
+//En proceso
 void ListArr::createSummaryNodes(NodeSummary *root){ //Funcion recurvisa 
     
     if (root == nullptr)
@@ -18,12 +22,10 @@ void ListArr::createSummaryNodes(NodeSummary *root){ //Funcion recurvisa
 
     NodeSummary *current = root;
     NodeSummary *prev = nullptr;
-    
-
-
-
+    //------------------------//
 }
 
+//En proceso
 void ListArr::createSummaryNodes(Node *root){
     if (root == nullptr)
     {
@@ -59,6 +61,7 @@ void ListArr::createSummaryNodes(Node *root){
     }
 }
 
+//En proceso
 int ListArr::delete_left(){
     if(head == nullptr){
         throw "No hay elementos que eliminar";
@@ -78,14 +81,16 @@ int ListArr::delete_left(){
     }
 }
 
+//Pendiente
+int ListArr::delete_right(){
+}
+
+//"Listo a medias" (Requiere que los metodos insert queden finalizados, por si hay que hacer algun cambio)
 int ListArr::size(){
     return num_elements;
 }
 
-int ListArr::delete_right(){
-    
-}
-
+//"Listo a medias" (La idea es que en base al metodo insert aplicarlo en insert_left)
 void ListArr::insert_left(int v){
     if (head == nullptr){ // En caso de que intentemos ingresar un elemento y no exista un nodo,creamos uno.
         head = new Node(capacity); 
@@ -117,6 +122,7 @@ void ListArr::insert_left(int v){
     }
 }
 
+//"Listo a medias" (La idea es que en base al metodo insert aplicarlo en insert_right)
 void ListArr::insert_right(int v){
     if (head == nullptr){ // En caso de que intentemos ingresar un elemento y no exista un nodo,creamos uno.
         head = new Node(capacity); 
@@ -148,16 +154,28 @@ void ListArr::insert_right(int v){
     }
 }
 
-
+//Listo
 void ListArr::print(){
     Node *current = head;
     while (current->next != nullptr){
-        for(int i = 0; i< num_elements; i++) cout<<current->arr[i]+" ";
-
+        for(int i = 0; i< num_elements; i++){
+            cout << current->arr[i] + " " ;
+        } 
         current = current->next;
     }
 }
 
+//En proceso
 bool ListArr::find(int v){
     
+}
+
+//Listo (*IDEA*: Se puede mejorar agregando un contador de nodos dentro de la estructura)
+int ListArr::countNodes(){
+    Node* current = head;
+    int count = 0;
+    for(count = 0; current->next != nullptr; count++){
+        current = current -> next;
+    }
+    return count;
 }

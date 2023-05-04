@@ -2,12 +2,10 @@
 #define _LISTARR
 #include <iostream>
 
-class ListArr
-{
+class ListArr{
 
 public:
-    struct Node
-    {
+    struct Node{
         int *arr;
         int capacity;
         int num_elements;
@@ -31,8 +29,7 @@ public:
     int num_elements;
     Node *head;
 
-    struct NodeSummary
-    {
+    struct NodeSummary{
         int total_capacity;
         int total_size;
         Node *left_child;
@@ -44,11 +41,13 @@ public:
 
     // METODO PARA CREACION DE NODOS RESUMEN
     void createSummaryNodes(Node *root);
+    void createSummaryNodes(NodeSummary *root);
 
     // METODOS PARA NODOS (ACCESO A SUS ARREGLOS)
     int size();
     int delete_left();
     int delete_right();
+    int countNodes();
     void insert_left(int v);
     void insert_right(int v);
     void insert(int v, int i);
