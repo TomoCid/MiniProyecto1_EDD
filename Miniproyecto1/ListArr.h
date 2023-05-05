@@ -1,6 +1,10 @@
 #ifndef _LISTARR
 #define _LISTARR
 #include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
 
 class ListArr{
 
@@ -11,10 +15,10 @@ public:
         int num_elements;
         Node *next;
 
-        Node(int capacity)
+        Node(int capacity, Node* next = nullptr)
         {
             this->capacity = capacity;
-            next = nullptr;
+            this->next = nullptr;
             num_elements = 0;
             arr = new int[capacity];
         }
@@ -27,6 +31,7 @@ public:
 
     int capacity;
     int num_elements;
+    int nodeCount;
     Node *head;
 
     struct NodeSummary{
@@ -38,7 +43,6 @@ public:
         //ESTOS SON LOS HIJOS DE TIPO NODESUMARY (EN OTRAS PALABRAS, HIJOS RESUMEN)
         NodeSummary *Summaryleft_child;
         NodeSummary *Summaryright_child;
-        NodeSummary *SummaryNext;
     };
 
     NodeSummary *TreeRoot;
@@ -48,18 +52,21 @@ public:
 
     // METODO PARA CREACION DE NODOS RESUMEN
     void createSummaryNodes(Node *root);
-    void createSummaryNodes(NodeSummary *root);
+    void createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes);
 
     // METODOS PARA NODOS (ACCESO A SUS ARREGLOS)
     int size();
     int delete_left();
     int delete_right();
-    int countNodes();
+    void searchIndex(int i, NodeSummary* TreeRoot);
     void insert_left(int v);
     void insert_right(int v);
     void insert(int v, int i);
     void print();
     bool find(int v);
+
+    int getHeight(int h);
+    void printTree(NodeSummary* node, int depth);
 };
 
 #endif
