@@ -9,14 +9,14 @@ ListArr::ListArr(int capacity)
     Node *node = new Node(capacity);
     nodeCount = 1;
     head = node;
+    total_num_elements = 0;
 }
 
 // Ya está casi listo, falta buscar la forma de implementarlo en insert
-void ListArr::searchIndex(int i, NodeSummary *TreeRoot)
-{
+void ListArr::searchIndex(int i, NodeSummary *TreeRoot, Node* target){
     NodeSummary *current = TreeRoot;
-
-    if (i > current->Summaryleft_child->total_size)
+    Node* target;
+    if (i<0 || i > total_num_elements-1)
     {
         throw "No exite el indice indicado";
         return;
@@ -25,30 +25,40 @@ void ListArr::searchIndex(int i, NodeSummary *TreeRoot)
     {
         if (current->Summaryleft_child != nullptr)
         {
-            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryleft_child);
+            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryleft_child, target);
         }
         else
         {
-            current->left_child->arr[i]; // Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
+            target = current->left_child; // Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
         }
     }
     else
     {
         if (current->Summaryright_child != nullptr)
         {
-            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryright_child);
+            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryright_child, target);
         }
         else
         {
-            current->right_child->arr[i]; // Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
+            target = current->right_child; // Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
         }
     }
 }
 
 // En proceso
-void ListArr::insert(int v, int i)
-{
-
+void ListArr::insert(int v, int i){
+    Node* target;
+    searchIndex(i,TreeRoot, target); //target toma el valor del nodo donde se realizará la operacion insert()
+    if (target->num_elements <= capacity - 1) {
+		for (int j = 0; i<=capacity - i; j++) {
+			target->arr[capacity - j] = target->arr[capacity - j - 1];
+		}
+		target->num_elements++;
+        total_num_elements++;
+	} else {
+        return;
+        //Continuar
+    }
 }
 
 //Función terminada
@@ -160,7 +170,7 @@ int ListArr::delete_right()
 //"Listo a medias" (Requiere que los metodos insert queden finalizados, por si hay que hacer algun cambio)
 int ListArr::size()
 {
-    return num_elements;
+    return total_num_elements;
 }
 
 //"Listo a medias" (La idea es que en base al metodo insert aplicarlo en insert_left)
@@ -171,7 +181,7 @@ void ListArr::insert_left(int v)
         head = new Node(capacity);
         head->arr[0] = v;
         head->num_elements++;
-        num_elements++;
+        total_num_elements++;
         nodeCount++;
     }
     else
@@ -187,7 +197,7 @@ void ListArr::insert_left(int v)
             Node *new_node = new Node(capacity);
             new_node->arr[0] = v;
             new_node->num_elements++;
-            num_elements++;
+            total_num_elements++;
             nodeCount++;
             current->next = new_node;
         }
@@ -199,7 +209,7 @@ void ListArr::insert_left(int v)
             }
             current->arr[0] = v;
             current->num_elements++;
-            num_elements++;
+            total_num_elements++;
         }
     }
     createSummaryNodes(head);
@@ -213,7 +223,7 @@ void ListArr::insert_right(int v)
         head = new Node(capacity);
         head->arr[capacity - 1] = v; // Se ingresa el elemento en la posición más a la derecha
         head->num_elements++;        // Aumenta el contador de elementos del nodo
-        num_elements++;              // Aumenta el contador de elementos global
+        total_num_elements++;              // Aumenta el contador de elementos global
         nodeCount++;
     }
     else
@@ -230,7 +240,7 @@ void ListArr::insert_right(int v)
             Node *new_node = new Node(capacity);
             new_node->arr[capacity - 1] = v; // Se ingresa el elemento en la posición más a la derecha
             new_node->num_elements++;
-            num_elements++;
+            total_num_elements++;
             nodeCount++;
             current->next = new_node;
         }
@@ -242,7 +252,7 @@ void ListArr::insert_right(int v)
             }
             current->arr[0] = v; // Se ingresa el elemento en la posición más a la derecha
             current->num_elements++;
-            num_elements++;
+            total_num_elements++;
         }
     }
 }

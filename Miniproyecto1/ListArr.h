@@ -18,7 +18,7 @@ public:
         Node(int capacity, Node* next = nullptr)
         {
             this->capacity = capacity;
-            this->next = nullptr;
+            this->next = next;
             num_elements = 0;
             arr = new int[capacity];
         }
@@ -30,7 +30,7 @@ public:
     };
 
     int capacity;
-    int num_elements;
+    int total_num_elements;
     int nodeCount;
     Node *head;
 
@@ -46,7 +46,7 @@ public:
     };
 
     NodeSummary *TreeRoot;
-
+    
     //Constructor de ListArr
     ListArr(int capacity);
 
@@ -58,14 +58,15 @@ public:
     int size();
     int delete_left();
     int delete_right();
-    void searchIndex(int i, NodeSummary* TreeRoot);
     void insert_left(int v);
     void insert_right(int v);
     void insert(int v, int i);
     void print();
     bool find(int v);
 
+    //Métodos extra de utilidad
     int getHeight();
+    void searchIndex(int i, NodeSummary* TreeRoot, Node* target);
 };
 
 #endif
