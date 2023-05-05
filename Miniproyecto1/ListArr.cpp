@@ -137,7 +137,7 @@ int ListArr::delete_right()
 
     if (TreeRoot == nullptr)
     {
-        return;
+        return 0;
     }
 
     NodeSummary *current = TreeRoot;
@@ -264,24 +264,21 @@ void ListArr::print()
 // La implementacion que dejaste actualmente es en base a recorrer todos los nodos, no usa arbol
 //"Listo a medias" (En una de esas hay una forma más eficiente de implementarlo con NodeSummary, por lo que es una solucion temporal)
 // Falta comprobar si funciona o hay algun error.
-bool ListArr::find(int v)
-{
-    Node *current = head; // Guardamos la ubicacion de head.
-    for (int i = 0; i < num_elements; i++)
-    {
-        if (head->arr[i] == v)
-        { // Si encuentra el dato en el arreglo retorna true.
-            head = current;
+bool ListArr::find(int v){
+    Node *aux = head; // Guardamos la ubicacion de head.
+    for (int i = 0; i < capacity; i++){
+        if (head->arr[i] == v) { // Si encuentra el dato en el arreglo retorna true.
+            head = aux;
+            cout<<"Se ha encontrado el elemento "<<v<<" en ListArr."<<endl;
             return true;
         }
     }
-    if (head->next != nullptr)
-    { // Si no, revisa si hay más nodos, y en el caso de que si, lo recorre.
-        head->next;
+    if (head->next != nullptr){ // Si no, revisa si hay más nodos, y en el caso de que si, lo recorre.
+        head = head->next;
         find(v);
-    }
-    else
-    { // Si no quedan nodos, retorna false.
+    } else { // Si no quedan nodos, retorna false.
+        head = aux;
+        cout<<"No se ha encontrado el elemento "<<v<<" en ListArr."<<endl;
         return false;
     }
 }
