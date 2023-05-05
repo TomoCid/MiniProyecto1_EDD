@@ -11,13 +11,25 @@ ListArr::ListArr(int capacity){
 }
 
 //TODO ESTO ESTA BUENAZO, SIGUE ASI AMIGO! :D
+//Ya está casi listo, falta buscar la forma de implementarlo en insert
 void ListArr::searchIndex(int i, NodeSummary* TreeRoot){
-    NodeSummary *aux = TreeRoot;
-    if(i <= aux->Summaryleft_child->total_size){
-        searchIndex(i-aux->Summaryleft_child->total_size, aux->Summaryleft_child);
+    NodeSummary *current = TreeRoot;
+
+    if(i>current->Summaryleft_child->total_size){
+        throw "No exite el indice indicado";
+        return;
+    } else if(i <= current->Summaryleft_child->total_size){
+        if(current->Summaryleft_child != nullptr){
+            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryleft_child);
+        } else {
+            current->left_child->arr[i]; //Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
+        }
     } else {
-//Diriguir al hijo derecho
-       return;
+        if(current->Summaryright_child != nullptr){
+            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryright_child);
+        } else {
+            current->right_child->arr[i]; //Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
+        }
     }
 }
 
@@ -237,13 +249,12 @@ bool ListArr::find(int v){
 
 
 //TESTING !!!
-int ListArr::getHeight(int h){
-    if(pow(2,h) >= nodeCount){
-        return h;
-    } else {
-        h++;
-        getHeight(h);
-    }
+int ListArr::getHeight(){
+    int h = 0;
+    while (pow(2, h) >= nodeCount) {
+		h++;
+	}
+	return h;
 }
 
 /*

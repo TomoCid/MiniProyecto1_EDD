@@ -65,8 +65,8 @@ public:
     void print();
     bool find(int v);
 
-    int getHeight(int h);
-    void printTree(NodeSummary* node, int depth);
+    int getHeight();
+    //void printTree(NodeSummary* node, int depth);
 };
 
 #endif
