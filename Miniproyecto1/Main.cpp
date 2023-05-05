@@ -9,9 +9,10 @@ int main(){
     for(int i=0;i<14;i++){
         listArr.insert_left(4);
     }
+
+    cout<<"Elementos en listArr: ";
     listArr.print();
 
-    cout<<"NODO RAIZ!: ";
-    cout<<"Capacidad total: "<<listArr.TreeRoot->total_capacity;
-    cout<<"Espacio usado: "<<listArr.TreeRoot->total_size;
+    cout<<endl<<"NODO RAIZ: "<<"Capacidad total: "<<listArr.TreeRoot->total_capacity<<" Espacio usado: "<<listArr.TreeRoot->total_size<<endl;
+
 }
