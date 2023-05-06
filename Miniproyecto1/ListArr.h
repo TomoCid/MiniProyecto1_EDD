@@ -10,7 +10,7 @@ class ListArr{
 
 public:
     struct Node{
-        int *arr;
+        vector<int> *arr;
         int capacity;
         int num_elements;
         Node *next;
@@ -20,7 +20,7 @@ public:
             this->capacity = capacity;
             this->next = next;
             num_elements = 0;
-            arr = new int[capacity];
+            arr = new vector<int>;
         }
 
         ~Node()

@@ -50,15 +50,12 @@ void ListArr::insert(int v, int i){
 		for (int j = 0; i<=capacity - i; j++) {
 			target->arr[capacity - j] = target->arr[capacity - j - 1];
 		}
-        target->arr[i]=v;
+       
+        target->arr->insert(target->arr->begin(), v);
 		target->num_elements++;
         total_num_elements++;
 	} else {
 
-        /*if(i==nullptr){
-            traget->left_child->arr[i]=v;
-        }*/
-        
         return;
         //Continuar
     }
@@ -144,11 +141,19 @@ void ListArr::createSummaryNodes(Node *root)
 // En proceso
 int ListArr::delete_left()
 {
-    Node *current = head;
-    
-    
-
-
+    int left_element;
+    if(head->arr->size()>0){
+        left_element = head->arr->at(0);
+        head->arr->erase(head->arr->begin());
+        head->num_elements--;
+        total_num_elements--;
+    }
+    if(head->arr->size()<=0){
+        head = head->next;
+        nodeCount--;
+    } 
+    updateTree();
+    return left_element;
 }
 
 // Pendiente
@@ -174,11 +179,11 @@ int ListArr::delete_right()
         return 0;
     }
     // Almacenamos el último elemento del arreglo antes de eliminarlo
-    int last_element = current->arr[current->num_elements - 1];
+    int last_element = current->arr->back();
+
     // Eliminamos el último elemento del arreglo del nodo
     
-    
-    int* aux = new int[capacity];
+    vector<int> *aux = new vector<int>;
     for(int i=1; i<current->num_elements;i++){
         aux[i-1]=current->arr[i];
     }
@@ -189,10 +194,6 @@ int ListArr::delete_right()
     
     return last_element;
 }
-
-
-
-
 
 //"Listo a medias" (Requiere que los metodos insert queden finalizados, por si hay que hacer algun cambio)
 int ListArr::size()
@@ -206,7 +207,7 @@ void ListArr::insert_left(int v)
     if (head == nullptr)
     { // ESTO QUIZA SE PUEDE ELIMINAR
         head = new Node(capacity);
-        head->arr[0] = v;
+        head->arr->insert(head->arr->begin(), v);
         head->num_elements++;
         total_num_elements++;
         nodeCount++;
@@ -222,7 +223,7 @@ void ListArr::insert_left(int v)
         if (current->num_elements == current->capacity)
         {
             Node *new_node = new Node(capacity);
-            new_node->arr[0] = v;
+            new_node->arr->insert(new_node->arr->begin(), v);
             new_node->num_elements++;
             total_num_elements++;
             nodeCount++;
@@ -234,7 +235,7 @@ void ListArr::insert_left(int v)
             {
                 current->arr[i] = current->arr[i - 1];
             }
-            current->arr[0] = v;
+            current->arr->insert(current->arr->begin(), v);
             current->num_elements++;
             total_num_elements++;
         }
@@ -248,7 +249,7 @@ void ListArr::insert_right(int v)
     if (head == nullptr)
     {
         head = new Node(capacity);
-        head->arr[0] = v;
+        head->arr->insert(head->arr->begin(), v);
         head->num_elements++;
         total_num_elements++;
         nodeCount++;
@@ -264,7 +265,7 @@ void ListArr::insert_right(int v)
         if (current->num_elements == current->capacity)
         {
             Node *new_node = new Node(capacity);
-            new_node->arr[0] = v;
+            new_node->arr->insert(new_node->arr->begin(), v);
             new_node->num_elements++;
             total_num_elements++;
             nodeCount++;
@@ -272,14 +273,13 @@ void ListArr::insert_right(int v)
         }
         else
         {
-            current->arr[current->num_elements] = v;
+            current->arr->push_back(v);
             current->num_elements++;
             total_num_elements++;
         }
     }
     createSummaryNodes(head);
 }
-
 
 //Función terminada
 void ListArr::print()
@@ -289,7 +289,7 @@ void ListArr::print()
     {
         for (int i = 0; i < current->num_elements; i++)
         {
-            cout << current->arr[i] << " ";
+            cout << current->arr->at(i) << " ";
         }
         current = current->next;
     }
@@ -301,7 +301,7 @@ bool ListArr::find(int v){
     Node *aux = head; // Guardamos la ubicacion de head.
     while(aux!=nullptr){
         for (int i = 0; i < capacity; i++){
-        if (aux->arr[i] == v) { // Si encuentra el dato en el arreglo retorna true.
+        if (aux->arr->at(i) == v) { // Si encuentra el dato en el arreglo retorna true.
             cout<<"Se ha encontrado el elemento "<< v <<" en ListArr."<<endl;
             return true;
             }

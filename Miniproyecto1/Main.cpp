@@ -14,15 +14,16 @@ int main(){
     listArr.print();
     cout<<"NODO RAIZ:"<<endl<<"Capacidad total: "<<listArr.TreeRoot->total_capacity<<endl<<"Espacio usado: "<<listArr.TreeRoot->total_size<<endl;
 
-    //Pruebas funcionamiento de find()
-    listArr.find(4);
-    listArr.find(3);
+    cout<<"Nodo hijo izquierdo, capacidad: "<<listArr.TreeRoot->Summaryleft_child->total_capacity<<endl;
+    cout<<"Nodo hijo derecha, capacidad: "<<listArr.TreeRoot->Summaryright_child->total_capacity;
 
-    listArr.delete_right();
 
-    listArr.updateTree();
+    for(int i=0;i<10;i++){
+        listArr.delete_left();
+    }
+
+    cout<<endl;
     cout<<"NODO RAIZ:"<<endl<<"Capacidad total: "<<listArr.TreeRoot->total_capacity<<endl<<"Espacio usado: "<<listArr.TreeRoot->total_size<<endl;
-
     listArr.print();
 
     return 0;

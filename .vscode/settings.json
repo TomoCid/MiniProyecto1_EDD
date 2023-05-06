@@ -8,7 +8,10 @@
         "vector": "cpp",
         "system_error": "cpp",
         "ostream": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "ranges": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/Program Files/Unity/Hub/Editor/2021.3.15f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/sources/cxx-stl/llvm-libc++abi"
 }
