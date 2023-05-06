@@ -47,7 +47,7 @@ public:
        
     };
 
-    NodeSummary *TreeRoot;
+    NodeSummary *TreeRoot = nullptr;
     
     //Constructor de ListArr
     ListArr(int capacity);

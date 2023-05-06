@@ -50,7 +50,6 @@ void ListArr::insert(int v, int i){
 		for (int j = 0; i<=capacity - i; j++) {
 			target->arr[capacity - j] = target->arr[capacity - j - 1];
 		}
-       
         target->arr->insert(target->arr->begin(), v);
 		target->num_elements++;
         total_num_elements++;
@@ -94,16 +93,16 @@ void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)
         summary->total_capacity = PrevSummaryNodes[0]->total_capacity;
         summary->total_size = PrevSummaryNodes[0]->total_size;
         summary->Summaryleft_child = PrevSummaryNodes[0];
-        summary->Summaryright_child = nullptr;
+        summary->Summaryright_child = nullptr; 
     }
     // Llamada recursiva para crear nodos resumen de los nodos resumen
+    PrevSummaryNodes.clear();
     createSummaryNodes(AuxiliarVector);
 }
 
 //Función terminada
 void ListArr::createSummaryNodes(Node *root)
 {
-    
     vector<NodeSummary *> NodeSummaryFirstLevel;
     NodeSummaryFirstLevel.clear();
     Node *current = root;
@@ -173,25 +172,23 @@ int ListArr::delete_right()
 
     // Accedemos al nodo correspondiente en el nivel inferior
     Node* current = currentSummary->right_child;
+    if(current == nullptr)  current = currentSummary->left_child;
+    if(current==nullptr) return 0;
 
-    // Si el nodo está vacío, no hay nada que eliminar
-    if (current == nullptr || current->num_elements == 0) {
-        return 0;
-    }
     // Almacenamos el último elemento del arreglo antes de eliminarlo
     int last_element = current->arr->back();
 
     // Eliminamos el último elemento del arreglo del nodo
-    
-    vector<int> *aux = new vector<int>;
-    for(int i=1; i<current->num_elements;i++){
-        aux[i-1]=current->arr[i];
+    current->arr->pop_back();
+    current->num_elements--;
+    total_num_elements--;
+
+    if(current->arr->size()<=0){
+        current = nullptr;
+        nodeCount--;
     }
-    delete[] current->arr;
-    current->arr = aux;
-    current->num_elements - 1;
     // Retornamos el último elemento eliminado del arreglo
-    
+    createSummaryNodes(head);
     return last_element;
 }
 
@@ -204,43 +201,32 @@ int ListArr::size()
 //"Listo a medias" (La idea es que en base al metodo insert aplicarlo en insert_left)
 void ListArr::insert_left(int v)
 {
-    if (head == nullptr)
-    { // ESTO QUIZA SE PUEDE ELIMINAR
-        head = new Node(capacity);
-        head->arr->insert(head->arr->begin(), v);
-        head->num_elements++;
-        total_num_elements++;
-        nodeCount++;
-    }
-    else
-    {
         Node *current = head;
-        while (current->next != nullptr && current->num_elements == current->capacity)
-        {
-            current = current->next;
-        }
-
+        
         if (current->num_elements == current->capacity)
         {
             Node *new_node = new Node(capacity);
+            head = new_node;
+            head->next = current;
             new_node->arr->insert(new_node->arr->begin(), v);
             new_node->num_elements++;
             total_num_elements++;
             nodeCount++;
-            current->next = new_node;
         }
         else
         {
-            for (int i = current->num_elements; i > 0; i--)
-            {
-                current->arr[i] = current->arr[i - 1];
-            }
             current->arr->insert(current->arr->begin(), v);
             current->num_elements++;
             total_num_elements++;
         }
+    
+    
+    if(TreeRoot!=nullptr){
+        updateTree();
+    }else{
+        createSummaryNodes(head);
     }
-    createSummaryNodes(head);
+
 }
 
 //"Listo a medias" (La idea es que en base al metodo insert aplicarlo en insert_right)
@@ -331,6 +317,7 @@ void ListArr::deleteTree(NodeSummary *node){
   }
     deleteTree(node->Summaryleft_child);
     deleteTree(node->Summaryright_child);
+    
   
   delete node;
 }
