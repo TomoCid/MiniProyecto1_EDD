@@ -41,8 +41,10 @@ public:
         Node *left_child;
         Node *right_child;
         //ESTOS SON LOS HIJOS DE TIPO NODESUMARY (EN OTRAS PALABRAS, HIJOS RESUMEN)
-        NodeSummary *Summaryleft_child;
-        NodeSummary *Summaryright_child;
+        NodeSummary *Summaryleft_child = nullptr;
+        NodeSummary *Summaryright_child = nullptr;
+
+       
     };
 
     NodeSummary *TreeRoot;
@@ -67,6 +69,9 @@ public:
     //Métodos extra de utilidad
     int getHeight();
     void searchIndex(int i, NodeSummary* TreeRoot, Node* target);
+    void deleteTree(NodeSummary *TreeRoot);
+    void updateTree();
+    void deleteLastElement(int* &arr, int &size);
 };
 
 #endif
