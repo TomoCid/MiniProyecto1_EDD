@@ -1,6 +1,6 @@
 #ifndef _ADTlistArr
 #define _ADTlistArr
-
+using namespace std;
 class ADTlistArr{
 
     public:

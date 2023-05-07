@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "ADTlistArr.h"
 
 using namespace std;
 
@@ -68,10 +69,11 @@ public:
 
     //Métodos extra de utilidad
     int getHeight();
-    void searchIndex(int i, NodeSummary* TreeRoot, Node* target);
+
+    void searchIndex(int &i, NodeSummary *TreeRoot, Node *&target); //CAMBIADO
+
     void deleteTree(NodeSummary *TreeRoot);
     void updateTree();
-    void deleteLastElement(int* &arr, int &size);
 };
 
 #endif

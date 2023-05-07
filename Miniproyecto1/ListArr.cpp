@@ -1,8 +1,8 @@
 #include "ListArr.h"
 #include <string>
+
 using namespace std;
 
-// Listo
 ListArr::ListArr(int capacity)
 {
     this->capacity = capacity;
@@ -12,59 +12,103 @@ ListArr::ListArr(int capacity)
     head = node;
 }
 
-// Listo
-void ListArr::searchIndex(int i, NodeSummary *TreeRoot, Node *target)
-{
+void ListArr::searchIndex(int &i, NodeSummary *TreeRoot, Node* &target){
     NodeSummary *current = TreeRoot;
-    if (i < 0 || i > total_num_elements - 1)
+    if (i<0 || i > total_num_elements - 1)
     {
         throw "No exite el indice indicado";
         return;
     }
-    else if (i <= current->Summaryleft_child->total_size)
-    {
+
+    if(current->Summaryleft_child==nullptr && i<current->left_child->num_elements){
+        target = current->left_child;
+        return;
+    }else if(current->Summaryright_child==nullptr && i>=current->left_child->num_elements){
+        i = i - current->left_child->num_elements;
+        target = current->right_child;
+        return;
+    }
+
+    if(i < current->Summaryleft_child->total_size){
         if (current->Summaryleft_child != nullptr)
         {
-            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryleft_child, target);
+            searchIndex(i, current->Summaryleft_child, target);
         }
         else
         {
-            target = current->left_child; // Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
+            target = current->left_child;
+            return; 
         }
     }
     else
     {
         if (current->Summaryright_child != nullptr)
         {
-            searchIndex(i - current->Summaryleft_child->total_size, current->Summaryright_child, target);
+            i = i - current->Summaryleft_child->total_size;
+            searchIndex(i, current->Summaryright_child, target);
+            
         }
         else
         {
-            target = current->right_child; // Para el insert puede ser la misma funcion pero en esta linea colocar "== v", siendo v el numero a ingresar
+            target = current->right_child; 
+            return;
         }
     }
+
 }
 
-// En proceso
-void ListArr::insert(int v, int i)
+void ListArr::insert(int v,int i)
 {
-    Node *target;
-    searchIndex(i, TreeRoot, target); // target toma el valor del nodo donde se realizará la operacion insert()
-    if (target->num_elements <= capacity - 1)
+    Node *target = nullptr;
+    cout<<"I1: "<<i<<endl;
+    searchIndex(i, TreeRoot, target);
+    cout << "Logre encontrar el nodo, ahora insercion" << endl;
+    cout << "[Capacity] : " << target->capacity << " [Size]: " << target->num_elements << endl;
+    cout << "Primer elemento : " << target->arr->at(0) << endl;
+
+    if (target != nullptr)
     {
-        for (int j = 0; i <= capacity - i; j++)
+        
+        if (target->num_elements < capacity)
         {
-            target->arr[capacity - j] = target->arr[capacity - j - 1];
+            cout<<"Caso 1: Insertar en el mismo nodo"<<endl;
+            target->arr->insert(target->arr->begin() + i, v);
+            target->num_elements++;
+            total_num_elements++;
+            updateTree();
         }
-        target->arr->insert(target->arr->begin(), v);
-        target->num_elements++;
-        total_num_elements++;
+        else
+        {
+            if ( (target->next != nullptr && target->next->num_elements == capacity) || target->next == nullptr){ //CASO NODO SIGUIENTE LLENO
+                cout<<"Caso 2: Crear nodo nuevo"<<endl;
+                cout<<"VALOR DE I "<<i<<endl;
+                Node *newNode = new Node(capacity);
+                nodeCount++;
+                Node* aux = target->next;
+                target->next = newNode;
+                newNode->next = aux;
+                
+                int auxElement = target->arr->at(i);
+                target->arr->at(i) = v;
+                newNode->arr->push_back(auxElement);
+                newNode->num_elements++;                
+                total_num_elements++;
+                updateTree();
+            }else if(target->next != nullptr && target->next->num_elements<capacity){
+                cout<<"Caso 3: Mover a nodo siguiente con espacio"<<endl;
+                target->next->arr->insert(target->arr->begin(),target->arr->back());
+                target->arr->at(i) = v;
+                target->next->num_elements++;
+                total_num_elements++;
+                updateTree();
+            }
+        }
     }
     else
     {
-
+        cout << "error en insert" << endl;
+        throw "Nodo Nulo";
         return;
-        // Continuar
     }
 }
 
@@ -73,24 +117,17 @@ void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)
 {
     vector<NodeSummary *> AuxiliarVector;
     AuxiliarVector.clear();
-    cout<<"Tamaño PrevSummaryNodes:"<<PrevSummaryNodes.size()<<endl;
-
 
     if (PrevSummaryNodes.size() == 1)
     {
         TreeRoot = PrevSummaryNodes[0];
         return;
     }
-    // Crear nodos resumen de pares de nodos
-    cout<<"Tamaño PrevSummaryNodes:"<<PrevSummaryNodes.size()<<endl;
     int aux = PrevSummaryNodes.size();
     for (int i = 0; i < aux / 2; i++)
     {
         NodeSummary *summary = new NodeSummary();
         AuxiliarVector.push_back(summary);
-
-        cout<<"Tamaño AuxiliarVector:"<<AuxiliarVector.size()<<endl;
-
         summary->total_capacity = PrevSummaryNodes[0]->total_capacity + PrevSummaryNodes[1]->total_capacity;
         summary->total_size = PrevSummaryNodes[0]->total_size + PrevSummaryNodes[1]->total_size;
         summary->Summaryleft_child = PrevSummaryNodes[0];
@@ -104,16 +141,12 @@ void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)
         {
             break;
         }
-
-
     }
     // Crear nodo resumen para el último nodo solitario si el número de nodos es impar
     if (PrevSummaryNodes.size() % 2 == 1)
     {
         NodeSummary *summary = new NodeSummary();
         AuxiliarVector.push_back(summary);
-        cout<<"Tamaño AuxiliarVector:"<<AuxiliarVector.size()<<endl;
-
 
         summary->total_capacity = PrevSummaryNodes[0]->total_capacity;
         summary->total_size = PrevSummaryNodes[0]->total_size;
@@ -121,7 +154,6 @@ void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)
         summary->Summaryright_child = nullptr;
     }
     // Llamada recursiva para crear nodos resumen de los nodos resumen
-            cout<<"Tamaño AuxiliarVector:"<<AuxiliarVector.size()<<endl;
 
     PrevSummaryNodes.clear();
     createSummaryNodes(AuxiliarVector);
@@ -139,19 +171,17 @@ void ListArr::createSummaryNodes(Node *root)
         for (int i = 0; i < nodeCount / 2; ++i)
         {
             NodeSummary *summary = new NodeSummary();
-            cout<<"He creado un nodo resumen nivel 1"<<endl;
+            cout << "He creado un nodo resumen nivel 1" << endl;
             NodeSummaryFirstLevel.push_back(summary);
-            cout<<"Tamaño NodeSummaryFirstLevel:"<<NodeSummaryFirstLevel.size()<<endl;
-
+            cout << "Tamaño NodeSummaryFirstLevel:" << NodeSummaryFirstLevel.size() << endl;
 
             summary->total_capacity = current->capacity + current->next->capacity;
             summary->total_size = current->num_elements + current->next->num_elements;
             summary->left_child = current;
             summary->right_child = current->next;
 
-            cout<<"Nodo nivel 1 [Capacity]: "<< summary->total_capacity<<" --";
-            cout<<"Nodo nivel 1 [Size]: "<< summary->total_size<<endl;
-
+            cout << "Nodo nivel 1 [Capacity]: " << summary->total_capacity << " --";
+            cout << "Nodo nivel 1 [Size]: " << summary->total_size << endl;
 
             current = current->next->next;
         }
@@ -160,21 +190,19 @@ void ListArr::createSummaryNodes(Node *root)
     if (nodeCount % 2 == 1)
     {
         NodeSummary *summary = new NodeSummary();
-        cout<<"He creado un nodo resumen nivel 1"<<endl;
+        cout << "He creado un nodo resumen nivel 1" << endl;
         NodeSummaryFirstLevel.push_back(summary);
-        cout<<"Tamaño NodeSummaryFirstLevel:"<<NodeSummaryFirstLevel.size()<<endl;
-
+        cout << "Tamaño NodeSummaryFirstLevel:" << NodeSummaryFirstLevel.size() << endl;
 
         summary->total_capacity = current->capacity;
         summary->total_size = current->num_elements;
         summary->left_child = current;
         summary->right_child = nullptr;
 
-        cout<<"Nodo nivel 1 [Capacity]: "<< summary->total_capacity<<" --";
-        cout<<"Nodo nivel 1 [Size]: "<< summary->total_size<<endl;
-
+        cout << "Nodo nivel 1 [Capacity]: " << summary->total_capacity << " --";
+        cout << "Nodo nivel 1 [Size]: " << summary->total_size << endl;
     }
-    
+
     // Llamada recursiva para crear nodos resumen de los nodos resumen
     createSummaryNodes(NodeSummaryFirstLevel);
 }
@@ -271,11 +299,11 @@ void ListArr::insert_left(int v)
 
     if (TreeRoot != nullptr)
     {
-        //updateTree();
+        updateTree();
     }
     else
     {
-        //createSummaryNodes(head);
+        createSummaryNodes(head);
     }
 }
 
