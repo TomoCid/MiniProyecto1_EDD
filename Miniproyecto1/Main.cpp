@@ -1,10 +1,14 @@
 #include "ListArr.h"
+#include "Array.h"
+#include "List.h"
 
 using namespace std;
 
 int main(){
     ListArr listArr(2); // Se crea una instancia de clase ListArr
     ListArr listArr2(5);
+
+    List lista;
 
     cout<<"-------------------- CASO VALIDO : --------------------------------"<<endl;
     for(int i=0;i<15;i++){
@@ -43,6 +47,18 @@ int main(){
     cout<<"Nodo hijo derecha, capacidad: "<<listArr2.TreeRoot->Summaryright_child->total_capacity<<endl;
     cout<<"Cantidad de nodos:"<<listArr2.nodeCount<<endl;
 
-    
+    lista.insert_left(1);
+    lista.insert_right(2);
+    if(lista.find(1)){
+        cout<<"Si se encuentra 1"<<endl;
+    }
+    if(lista.find(2)){
+        cout<<"Si se encuentra 2"<<endl;
+    }
+    if(lista.find(3)){
+        cout<<"Si se encuentra 3"<<endl;
+    }else{
+        cout<<"No se encuentra 3"<<endl;
+    }
     return 0;
 }

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class ListArr{
+class ListArr: public ADTlistArr{
 
 public:
     struct Node{
