@@ -9,7 +9,8 @@ using namespace std;
 
 class ListArr: public ADTlistArr{
 
-public:
+private:
+
     struct Node{
         vector<int> *arr;
         int capacity;
@@ -44,12 +45,12 @@ public:
         //ESTOS SON LOS HIJOS DE TIPO NODESUMARY (EN OTRAS PALABRAS, HIJOS RESUMEN)
         NodeSummary *Summaryleft_child = nullptr;
         NodeSummary *Summaryright_child = nullptr;
-
-       
     };
 
     NodeSummary *TreeRoot = nullptr;
-    
+
+
+public:    
     //Constructor de ListArr
     ListArr(int capacity);
 
@@ -66,12 +67,9 @@ public:
     void insert(int v, int i);
     void print();
     bool find(int v);
-
     //Métodos extra de utilidad
     int getHeight();
-
-    void searchIndex(int &i, NodeSummary *TreeRoot, Node *&target); //CAMBIADO
-
+    void searchIndex(int &i, NodeSummary *TreeRoot, Node *&target); 
     void deleteTree(NodeSummary *TreeRoot);
     void updateTree();
 };

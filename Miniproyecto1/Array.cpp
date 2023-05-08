@@ -47,3 +47,23 @@ bool Array::find(int v){
     }
     return false;
 }
+
+int Array::size(){
+    return 0;
+}
+
+int Array::delete_left(){
+    return 0;
+}
+    
+int Array::delete_right(){
+    return 0;
+}
+
+void Array::insert(int v, int i){
+    return;
+}
+    
+void Array::print(){
+    return;    
+}

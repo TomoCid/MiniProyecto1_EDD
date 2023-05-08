@@ -39,3 +39,22 @@ bool List::find(int v){
     return false;
 }
 
+int List::size(){
+    return 0;
+}
+
+int List::delete_left(){
+    return 0;
+}
+    
+int List::delete_right(){
+    return 0;
+}
+
+void List::insert(int v, int i){
+    return;
+}
+    
+void List::print(){
+    return;    
+}
