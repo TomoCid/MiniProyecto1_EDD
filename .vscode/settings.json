@@ -12,7 +12,8 @@
         "array": "cpp",
         "string_view": "cpp",
         "ranges": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "chrono": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/Program Files/Unity/Hub/Editor/2021.3.15f1/Editor/Data/PlaybackEngines/AndroidPlayer/NDK/sources/cxx-stl/llvm-libc++abi"
 }
