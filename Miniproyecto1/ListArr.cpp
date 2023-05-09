@@ -59,6 +59,13 @@ void ListArr::searchIndex(int &i, NodeSummary *TreeRoot, Node* &target){//O(log(
 
 void ListArr::insert(int v,int i)//O(log n)
 {
+    if(i==0 && head->num_elements==0 && head->next==nullptr){
+        head->arr->push_back(v);
+        head->num_elements++;
+        total_num_elements++;
+        updateTree();
+        return;
+    }
     Node *target = nullptr;
     searchIndex(i, TreeRoot, target);
 
@@ -197,38 +204,52 @@ int ListArr::delete_left()
     return left_element;
 }
 
-int ListArr::delete_right() //O(log(n))
-{
+int ListArr::delete_right()
+{                                   
     if (TreeRoot == nullptr)
     {
-        return 0;
-    }
-
+        throw "No hay más elementos en listArr";
+        return -1;
+    }               
+    // Empezamos en la raíz
     NodeSummary *currentSummary = TreeRoot;
 
-    while (currentSummary->Summaryright_child != nullptr)
+    // Bajamos hasta el nodo de la derecha más profundo
+    while (currentSummary->Summaryright_child != nullptr || currentSummary->Summaryleft_child != nullptr)
     {
-        currentSummary = currentSummary->Summaryright_child;
+        if (currentSummary->Summaryright_child != nullptr) {
+            currentSummary = currentSummary->Summaryright_child;
+        }
+    else {
+        currentSummary = currentSummary->Summaryleft_child;
+        }
     }
-
-    Node *current = currentSummary->right_child;
-    if (current == nullptr)
-        current = currentSummary->left_child;
-    if (current == nullptr)
-        return 0;
-
+                                                                                               
+    // Accedemos al nodo correspondiente en el nivel inferior
+    Node *current = new Node(capacity);
+    if(currentSummary->right_child!=nullptr){
+        current=currentSummary->right_child; 
+    }else if (currentSummary->left_child!= nullptr){
+        current = currentSummary->left_child; 
+    } else if (current == nullptr){
+        throw "No hay más elementos en su listArr";
+        return 0; 
+    }
+    // Almacenamos el último elemento del arreglo antes de eliminarlo
     int last_element = current->arr->back();
 
+    // Eliminamos el último elemento del arreglo del nodo
     current->arr->pop_back();
     current->num_elements--;
     total_num_elements--;
 
     if (current->arr->size() <= 0)
     {
-        current = nullptr;
         nodeCount--;
+        current = nullptr;
     }
-    createSummaryNodes(head);
+    // Retornamos el último elemento eliminado del arreglo
+    updateTree();
     return last_element;
 }
 
@@ -270,46 +291,58 @@ void ListArr::insert_left(int v)//O(n)
 
 void ListArr::insert_right(int v)
 {
-    if (head == nullptr)
+    if (TreeRoot == nullptr)
     {
-        head = new Node(capacity);
-        head->arr->insert(head->arr->begin(), v);
-        head->num_elements++;
-        total_num_elements++;
-        nodeCount++;
-    }
-    else
-    {
-        Node *current = head;
-        while (current->next != nullptr && current->num_elements == current->capacity)
-        {
-            current = current->next;
-        }
-
-        if (current->num_elements == current->capacity)
-        {
-            Node *new_node = new Node(capacity);
-            new_node->arr->insert(new_node->arr->begin(), v);
-            new_node->num_elements++;
+        if(head->arr->size()<capacity){
+            head->arr->push_back(v);
+            head->num_elements++;
             total_num_elements++;
-            nodeCount++;
-            current->next = new_node;
+            updateTree();
+        }
+        return;
+    }
+    NodeSummary *currentSummary = TreeRoot;
+    while (currentSummary->Summaryright_child != nullptr || currentSummary->Summaryleft_child != nullptr)
+    {
+        if (currentSummary->Summaryright_child != nullptr)
+        {
+            currentSummary = currentSummary->Summaryright_child;
         }
         else
         {
-            current->arr->push_back(v);
-            current->num_elements++;
-            total_num_elements++;
+            currentSummary = currentSummary->Summaryleft_child;
         }
     }
-
-    if (TreeRoot != nullptr)
+    Node *current = new Node(capacity);
+    if (currentSummary->right_child != nullptr)
     {
+        current = currentSummary->right_child;
+    }
+    else if (currentSummary->left_child != nullptr)
+    {
+        current = currentSummary->left_child;
+    }
+    else if (current == nullptr)
+    {
+        throw "No hay más elementos en su listArr";
+        return;
+    }
+    if (current->num_elements < capacity)
+    {
+        current->arr->push_back(v);
+        current->num_elements++;
+        total_num_elements++;
         updateTree();
     }
     else
     {
-        createSummaryNodes(head);
+        Node *newNode = new Node(capacity);
+        nodeCount++;
+        current->next=newNode;
+        newNode->arr->push_back(v);
+        newNode->num_elements++;
+        total_num_elements++;
+        updateTree();
     }
 }
 

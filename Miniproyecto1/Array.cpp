@@ -9,7 +9,7 @@ Array::Array(int capacity){
 }
 
 void Array::insert_left(int v){
-    if(num_elements==capacity){
+    /*if(num_elements==capacity){
         int* newArr = new int[capacity*2];
         for (int i = 0; i < num_elements; i++) {
             newArr[i] = arr[i];
@@ -17,11 +17,10 @@ void Array::insert_left(int v){
         delete[] arr;
         arr = newArr;
         capacity = capacity*2;
-    }
+    }*/
     for(int i = 0; i<num_elements; i++){
         arr[ i + 1] = arr[i];
     }
-    memmove(arr + 1, arr, num_elements * sizeof(int));
     arr[0] = v;
     num_elements++;
 }
