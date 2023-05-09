@@ -7,6 +7,7 @@ using namespace std;
 
 int main(){
 
+
     int b = 8192; //Modificar b para la capacidad de cada experimento
     ListArr test_listArr1(b);
     Array test_array1(10); //Capacidad tal que no se llene con las pruebas
@@ -63,6 +64,5 @@ int main(){
     double tiempo_promedio_3 = tiempo_final_3;
     cout<<"Tiempo promedio Insert_right(): "<<tiempo_promedio_3<<" us"<<endl;
 
-    
     return 0;
 }

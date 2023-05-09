@@ -12,7 +12,7 @@ ListArr::ListArr(int capacity)
     head = node;
 }
 
-void ListArr::searchIndex(int &i, NodeSummary *TreeRoot, Node* &target){//O(log(n))
+void ListArr::searchIndex(int &i, NodeSummary *TreeRoot, Node* &target){
     NodeSummary *current = TreeRoot;
     if (i<0 || i > total_num_elements - 1)
     {
@@ -57,13 +57,20 @@ void ListArr::searchIndex(int &i, NodeSummary *TreeRoot, Node* &target){//O(log(
 
 }
 
-void ListArr::insert(int v,int i)//O(log n)
+void ListArr::insert(int v,int i)
 {
     if(i==0 && head->num_elements==0 && head->next==nullptr){
         head->arr->push_back(v);
         head->num_elements++;
         total_num_elements++;
-        updateTree();
+        if (TreeRoot != nullptr)
+        {
+            updateTree();
+        }
+        else
+        {
+            createSummaryNodes(head);
+        }
         return;
     }
     Node *target = nullptr;
@@ -111,7 +118,7 @@ void ListArr::insert(int v,int i)//O(log n)
     }
 }
 
-void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)//O(nodeCount)
+void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)
 {
     vector<NodeSummary *> AuxiliarVector;
     AuxiliarVector.clear();
@@ -154,7 +161,7 @@ void ListArr::createSummaryNodes(vector<NodeSummary *> PrevSummaryNodes)//O(node
     createSummaryNodes(AuxiliarVector);
 }
 
-void ListArr::createSummaryNodes(Node *root) //O(nodeCount)
+void ListArr::createSummaryNodes(Node *root) 
 {
     vector<NodeSummary *> NodeSummaryFirstLevel;
     NodeSummaryFirstLevel.clear();
@@ -200,45 +207,56 @@ int ListArr::delete_left()
         head = head->next;
         nodeCount--;
     }
-    updateTree();
+    
+    if (nodeCount == 0)
+    {
+        total_num_elements = 0;
+        TreeRoot = nullptr;
+        head = new Node(capacity);
+        nodeCount = 1;
+    }
+    if (nodeCount > 0)
+        updateTree();
+
     return left_element;
 }
 
 int ListArr::delete_right()
-{                                   
+{
     if (TreeRoot == nullptr)
     {
-        throw "No hay más elementos en listArr";
-        return -1;
-    }               
-    // Empezamos en la raíz
+        return 0;
+    }
     NodeSummary *currentSummary = TreeRoot;
 
-    // Bajamos hasta el nodo de la derecha más profundo
     while (currentSummary->Summaryright_child != nullptr || currentSummary->Summaryleft_child != nullptr)
     {
-        if (currentSummary->Summaryright_child != nullptr) {
+        if (currentSummary->Summaryright_child != nullptr)
+        {
             currentSummary = currentSummary->Summaryright_child;
         }
-    else {
-        currentSummary = currentSummary->Summaryleft_child;
+        else
+        {
+            currentSummary = currentSummary->Summaryleft_child;
         }
     }
-                                                                                               
-    // Accedemos al nodo correspondiente en el nivel inferior
+
     Node *current = new Node(capacity);
-    if(currentSummary->right_child!=nullptr){
-        current=currentSummary->right_child; 
-    }else if (currentSummary->left_child!= nullptr){
-        current = currentSummary->left_child; 
-    } else if (current == nullptr){
-        throw "No hay más elementos en su listArr";
-        return 0; 
+    if (currentSummary->right_child != nullptr)
+    {
+        current = currentSummary->right_child;
     }
-    // Almacenamos el último elemento del arreglo antes de eliminarlo
+    else if (currentSummary->left_child != nullptr)
+    {
+        current = currentSummary->left_child;
+    }
+    else if (current == nullptr)
+    {
+        throw "No hay más elementos en su listArr";
+        return 0;
+    }
     int last_element = current->arr->back();
 
-    // Eliminamos el último elemento del arreglo del nodo
     current->arr->pop_back();
     current->num_elements--;
     total_num_elements--;
@@ -248,17 +266,24 @@ int ListArr::delete_right()
         nodeCount--;
         current = nullptr;
     }
-    // Retornamos el último elemento eliminado del arreglo
-    updateTree();
+    if (nodeCount == 0)
+    {
+        total_num_elements = 0;
+        TreeRoot = nullptr;
+        head = new Node(capacity);
+        nodeCount = 1;
+    }
+    if (nodeCount > 0)
+        updateTree();
     return last_element;
 }
 
-int ListArr::size()//O(1)
+int ListArr::size()
 {
     return total_num_elements;
 }
 
-void ListArr::insert_left(int v)//O(n)
+void ListArr::insert_left(int v)
 {
     Node *current = head;
 
@@ -346,7 +371,7 @@ void ListArr::insert_right(int v)
     }
 }
 
-void ListArr::print() //O(n)
+void ListArr::print() 
 {
     Node *current = head;
     while (current != nullptr)
@@ -360,7 +385,7 @@ void ListArr::print() //O(n)
     cout << endl;
 }
 
-bool ListArr::find(int v) //O(n) y O(1) en espacio
+bool ListArr::find(int v) 
 {
     Node *aux = head; 
     while (aux != nullptr)
@@ -377,7 +402,7 @@ bool ListArr::find(int v) //O(n) y O(1) en espacio
     return false;
 }
 
-int ListArr::getHeight()//O(log nodeCounts)
+int ListArr::getHeight()
 {
     int h = 0;
     while (pow(2, h) >= nodeCount)
@@ -387,7 +412,7 @@ int ListArr::getHeight()//O(log nodeCounts)
     return h;
 }
 
-void ListArr::deleteTree(NodeSummary *node)//O(nodeCount)
+void ListArr::deleteTree(NodeSummary *node)
 {
 
     if (node == nullptr)
@@ -400,7 +425,7 @@ void ListArr::deleteTree(NodeSummary *node)//O(nodeCount)
     delete node;
 }
 
-void ListArr::updateTree()//O(nodeCount + log n)
+void ListArr::updateTree()
 {
     deleteTree(TreeRoot);
     createSummaryNodes(head);
